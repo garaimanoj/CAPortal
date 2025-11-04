@@ -70,7 +70,7 @@ public class GeneralTests {
         assertFalse(userCN_Pattern.matcher("DAVE - DAVE +").matches()); 
         assertFalse(userCN_Pattern.matcher("DAVE - DAVE /").matches()); 
         assertFalse(userCN_Pattern.matcher("' adfa ").matches()); 
-        assertFalse(userCN_Pattern.matcher("dav�d� gar�on�").matches()); 
+        assertFalse(userCN_Pattern.matcher("davídó garçoné").matches()); 
 
         // Note, this method uses 'find()' to find an illegal char using negation       
         userCN_Pattern = Pattern.compile("[^A-Za-z0-9\\-\\(\\) ]");
@@ -82,7 +82,7 @@ public class GeneralTests {
         assertTrue(userCN_Pattern.matcher("DAVE test the - (3rd) +").find()); 
         assertTrue(userCN_Pattern.matcher("DAVE - DAVE /").find()); 
         assertTrue(userCN_Pattern.matcher("' adfa ").find()); 
-        assertTrue(userCN_Pattern.matcher("dav�d� gar�on�").find()); 
+        assertTrue(userCN_Pattern.matcher("davídó garçoné").find()); 
         
         // Note, illegal multiple white space/tabs have to be tested separtely
         assertFalse(" hello world ".contains("  "));  // single space is ok  
