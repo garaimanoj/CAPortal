@@ -481,9 +481,11 @@ public class JdbcCertificateDao {
 
         LocalDate targetDate = LocalDate.now(ZoneOffset.UTC).plusDays(daysToExpire);
 
+        // yyyyMMddHHmmss produces only digits → safe to parse as long
         long startOfDay = Long.parseLong(
                 formatter.format(targetDate.atStartOfDay(ZoneOffset.UTC)));
-
+                
+        // yyyyMMddHHmmss produces only digits → safe to parse as long
         long endOfDay = Long.parseLong(
                 formatter.format(targetDate.plusDays(1)
                                 .atStartOfDay(ZoneOffset.UTC)));

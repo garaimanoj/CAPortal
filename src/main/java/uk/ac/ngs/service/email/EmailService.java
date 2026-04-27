@@ -505,6 +505,7 @@ public class EmailService {
     public void sendEmailReminderToUserOnCertExpiry(long certKey, int daysToExpire, String cn, String dn, String recipientEmail) {
         SimpleMailMessage msg = new SimpleMailMessage(this.emailTemplate);
         msg.setTo(recipientEmail);
+        msg.setSubject("Your e-Science User Certificate will expire in " + daysToExpire + " days!");
         Map<String, Object> vars = new HashMap<>();
 
         vars.put("certKey", certKey);
