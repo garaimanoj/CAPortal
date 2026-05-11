@@ -36,7 +36,8 @@ public class TaskConfig implements SchedulingConfigurer {
         this.certificateService = certificateService;
     }
 
-    @Scheduled(cron = "0 44 15 * * ?")
+    
+    @Scheduled(cron = "${cert.expiry.reminder.cron:0 0 7 * * ?}")
     public void runDailyCertificateExpiryReminderJob() {
 
         log.info("Starting daily certificate expiry reminder job");

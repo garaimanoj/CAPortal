@@ -256,7 +256,6 @@ public class CertificateService {
      * </p>
      */
     public void sendCertificateExpiryReminders() {
-
         sendRemindersForDaysToExpire(7);
         sendRemindersForDaysToExpire(30);
     }
@@ -277,12 +276,7 @@ public class CertificateService {
             log.info("Sending " + daysToExpire + "-days expiry reminder for cert [" + cert.getCert_key() + "] to "
                     + cert.getEmail());
 
-            this.emailService.sendEmailReminderToUserOnCertExpiry(
-                    cert.getCert_key(),
-                    daysToExpire,
-                    cert.getCn(),
-                    cert.getDn(),
-                    cert.getEmail());
+            this.emailService.sendEmailReminderToUserOnCertExpiry(cert, daysToExpire);
         }
     }
 

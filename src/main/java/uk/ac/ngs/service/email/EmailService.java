@@ -18,6 +18,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import uk.ac.ngs.common.CertUtil;
 import uk.ac.ngs.domain.CSR_Flags;
+import uk.ac.ngs.domain.CertificateRow;
 
 import javax.inject.Inject;
 import java.io.PrintWriter;
@@ -498,20 +499,21 @@ public class EmailService {
      *
      * @param certKey certificate identifier
      * @param daysToExpire number of days remaining before expiry
+     * @param cn certificate common name 
      * @param dn certificate distinguished name     
      * @param recipientEmail recipient's email address
      */
 
-    public void sendEmailReminderToUserOnCertExpiry(long certKey, int daysToExpire, String cn, String dn, String recipientEmail) {
+    public void sendEmailReminderToUserOnCertExpiry(CertificateRow cert, int daysToExpire) {
         SimpleMailMessage msg = new SimpleMailMessage(this.emailTemplate);
-        msg.setTo(recipientEmail);
+        msg.setTo(cert.getEmail());
         msg.setSubject("Your e-Science User Certificate will expire in " + daysToExpire + " days!");
         Map<String, Object> vars = new HashMap<>();
 
-        vars.put("certKey", certKey);
+        vars.put("certKey", cert.getCert_key());
         vars.put("daysToExpire", daysToExpire);
-        vars.put("cn", cn);
-        vars.put("dn", dn);
+        vars.put("cn", cert.getCn());
+        vars.put("dn", cert.getDn());
         vars.put("basePortalUrl", basePortalUrl);
 
         try {
