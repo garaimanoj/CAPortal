@@ -497,11 +497,8 @@ public class EmailService {
      * Sends an email reminder to the user informing them of an upcoming
      * certificate expiry.
      *
-     * @param certKey certificate identifier
+     * @param cert certificate
      * @param daysToExpire number of days remaining before expiry
-     * @param cn certificate common name 
-     * @param dn certificate distinguished name     
-     * @param recipientEmail recipient's email address
      */
 
     public void sendEmailReminderToUserOnCertExpiry(CertificateRow cert, int daysToExpire) {
