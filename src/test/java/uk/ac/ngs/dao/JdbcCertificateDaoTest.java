@@ -13,7 +13,9 @@
 package uk.ac.ngs.dao;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -166,6 +168,7 @@ public class JdbcCertificateDaoTest {
     public void shouldReturnCertificatesExpiringInSevenDays() {
         // given
         int daysToExpire = 7;
+        LocalDate processingDate = LocalDate.now(ZoneOffset.UTC);
 
         CertificateRow cert1 = new CertificateRow();
         cert1.setCert_key(201L);
@@ -184,7 +187,7 @@ public class JdbcCertificateDaoTest {
                 .thenReturn(expectedRows);
 
         // when
-        List<CertificateRow> result = jdbcCertificateDao.getValidCertificatesExpiringInDays(daysToExpire);
+        List<CertificateRow> result = jdbcCertificateDao.getValidCertificatesExpiringInDays(processingDate, daysToExpire);
 
         // then
         assertNotNull(result);
@@ -194,13 +197,15 @@ public class JdbcCertificateDaoTest {
 
     @Test
     public void shouldReturnEmptyListWhenNoCertificatesExpiringInGivenDays() {
+        int daysToExpire = 7;
+        LocalDate processingDate = LocalDate.now(ZoneOffset.UTC);
 
         // given
         when(jdbcTemplate.query(anyString(), anyMap(), ArgumentMatchers.<RowMapper<CertificateRow>>any()))
                 .thenReturn(List.of());
 
         // when
-        List<CertificateRow> result = jdbcCertificateDao.getValidCertificatesExpiringInDays(7);
+        List<CertificateRow> result = jdbcCertificateDao.getValidCertificatesExpiringInDays(processingDate, daysToExpire);
 
         // then
         assertNotNull(result);
@@ -209,6 +214,8 @@ public class JdbcCertificateDaoTest {
 
     @Test
     public void shouldUseCorrectStartAndEndOfDayForExpiryCheck() {
+        int daysToExpire = 7;
+        LocalDate processingDate = LocalDate.now(ZoneOffset.UTC);
 
         String EXPECTED_SQL = """
                 SELECT cert_key, 'data' as data, dn, cn, email, status, role, notafter
@@ -229,7 +236,7 @@ public class JdbcCertificateDaoTest {
                 .thenReturn(List.of());
 
         // when
-        jdbcCertificateDao.getValidCertificatesExpiringInDays(7);
+        jdbcCertificateDao.getValidCertificatesExpiringInDays(processingDate, daysToExpire);
 
         // then
         Map<String, Object> params = paramsCaptor.getValue();

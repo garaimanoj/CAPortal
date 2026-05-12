@@ -475,11 +475,11 @@ public class JdbcCertificateDao {
      * @param daysToExpire number of days from today (e.g. 7 for a 7-day reminder)
      * @return list of certificates expiring exactly in the specified number of days
      */
-    public List<CertificateRow> getValidCertificatesExpiringInDays(int daysToExpire) {
+    public List<CertificateRow> getValidCertificatesExpiringInDays(LocalDate processingDate, int daysToExpire) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZoneOffset.UTC);
 
-        LocalDate targetDate = LocalDate.now(ZoneOffset.UTC).plusDays(daysToExpire);
+        LocalDate targetDate = processingDate.plusDays(daysToExpire);
 
         // yyyyMMddHHmmss produces only digits → safe to parse as long
         long startOfDay = Long.parseLong(
