@@ -56,7 +56,8 @@ public class JobExecutionDao {
     }
 
     public void updateLastRunDate(String jobName, LocalDate lastRunDate) {
-
+        // This query inserts a new job record if it doesn’t exist, 
+        // or updates its last run date if it already exists, using PostgreSQL’s UPSERT mechanism.
         String sql = """
                 INSERT INTO job_execution_tracker (job_name, last_run_date)
                 VALUES (:jobName, :lastRunDate)

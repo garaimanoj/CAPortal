@@ -58,7 +58,6 @@ public class JobExecutionDaoTests {
                 anyString(),
                 argThat((Map<String, Object> params) -> jobName.equals(params.get("jobName"))),
                 ArgumentMatchers.<RowMapper<LocalDate>>any());
-
     }
 
     @Test
@@ -124,6 +123,7 @@ public class JobExecutionDaoTests {
         String executedSql = sqlCaptor.getValue();
 
         assertTrue(executedSql.contains("INSERT INTO job_execution_tracker"));
+        assertTrue(executedSql.contains("ON CONFLICT"));
     }
 
     @Test
