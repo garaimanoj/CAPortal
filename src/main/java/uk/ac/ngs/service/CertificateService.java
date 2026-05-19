@@ -292,20 +292,28 @@ public class CertificateService {
 
         List<CertificateRow> certificates = jdbcCertDao.getValidCertificatesExpiringInDays(processingDate, daysToExpire);
         
-        int count = certificates.size();
+        int totalCertificates = certificates.size();
 
-        if (count > 0) {
-            log.info(count + " certificate(s) are going to expire after " + daysToExpire + " days.");
+        if (totalCertificates > 0) {
+            log.info(totalCertificates + " certificate(s) are going to expire after " + daysToExpire + " days.");
         } else {
             log.info("No certificates are going to expire after " + daysToExpire + " days.");
         }
 
+        int successCount = 0;
+        int failureCount = 0;
+
         for (CertificateRow cert : certificates) {
             log.info("Sending " + daysToExpire + "-days expiry reminder for cert [" + cert.getCert_key() + "] to "
                     + cert.getEmail());
-
-            this.emailService.sendEmailReminderToUserOnCertExpiry(cert, daysToExpire);
-        }
+            if(this.emailService.sendEmailReminderToUserOnCertExpiry(cert, daysToExpire)){
+                successCount++;
+            } else{
+                failureCount++;
+            }            
+        }        
+        log.info("Summary for " + daysToExpire + "-day expiry reminder (processingDate=" + processingDate + "): total="
+                + totalCertificates + ", sent=" + successCount + ", failed=" + failureCount);
     }
 
 

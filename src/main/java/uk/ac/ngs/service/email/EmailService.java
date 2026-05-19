@@ -501,7 +501,7 @@ public class EmailService {
      * @param daysToExpire number of days remaining before expiry
      */
 
-    public void sendEmailReminderToUserOnCertExpiry(CertificateRow cert, int daysToExpire) {
+    public boolean sendEmailReminderToUserOnCertExpiry(CertificateRow cert, int daysToExpire) {
         SimpleMailMessage msg = new SimpleMailMessage(this.emailTemplate);
         msg.setTo(cert.getEmail());
         msg.setSubject("Your e-Science User Certificate will expire in " + daysToExpire + " days!");
@@ -515,8 +515,11 @@ public class EmailService {
 
         try {
             this.mailSender.send(msg, vars, this.emailUserCertExpiryReminderTemplate);
+            log.debug("Certificate expiry reminder email sent to " + cert.getCn());
+            return true;
         } catch (MailException ex) {
-            log.error("MailSender " + ex.getMessage());
+            log.error("Error while sending certificate expiry reminder email to " + cert.getCn() + ": " + ex.getMessage());
+            return false;
         }
     }
 
