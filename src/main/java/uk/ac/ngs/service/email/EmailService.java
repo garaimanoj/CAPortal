@@ -518,7 +518,8 @@ public class EmailService {
             log.debug("Certificate expiry reminder email sent to " + cert.getCn());
             return true;
         } catch (MailException ex) {
-            log.error("Error while sending certificate expiry reminder email to " + cert.getCn() + ": " + ex.getMessage());
+            log.error("Error while sending certificate expiry reminder email to " + cert.getCn() + ": "
+                    + ex.getMessage());
             return false;
         }
     }
